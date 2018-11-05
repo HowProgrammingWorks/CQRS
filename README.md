@@ -1,2 +1,1 @@
-# SIMD
-Single Instruction/Multiple Data
+# CQRS - Command-Query Responsibility Separation
