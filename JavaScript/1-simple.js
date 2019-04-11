@@ -58,7 +58,6 @@ class Bank {
   select({ account, operation }) {
     const query = new AccountQuery(account, operation);
     this.queries.push(query);
-    console.dir(query);
     const result = [];
     for (const command of this.commands) {
       let condition = true;
@@ -67,6 +66,7 @@ class Bank {
       if (condition) result.push(command);
     }
     query.rows = result.length;
+    console.dir(query);
     return result;
   }
 }

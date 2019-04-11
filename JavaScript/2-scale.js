@@ -71,7 +71,6 @@ class BankRead {
   select({ account, operation }) {
     const query = new AccountQuery(account, operation);
     this.queries.push(query);
-    console.dir(query);
     const result = [];
     for (const command of this.commands) {
       let condition = true;
@@ -80,6 +79,7 @@ class BankRead {
       if (condition) result.push(command);
     }
     query.rows = result.length;
+    console.dir(query);
     return result;
   }
 }
@@ -109,3 +109,5 @@ console.table(res2);
 
 const res3 = readApi3.select({ operation: 'Withdraw' });
 console.table(res3);
+
+console.table(readApi3.queries);
