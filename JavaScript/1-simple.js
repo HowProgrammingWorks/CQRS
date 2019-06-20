@@ -22,6 +22,7 @@ class BankAccount {
     this.balance = 0;
     BankAccount.collection.set(name, this);
   }
+
   static find(name) {
     return BankAccount.collection.get(name);
   }
@@ -45,6 +46,7 @@ class Bank {
     this.commands = [];
     this.queries = [];
   }
+
   operation(account, amount) {
     const operation = amount < 0 ? 'Withdraw' : 'Income';
     const execute = operations[operation];
@@ -55,6 +57,7 @@ class Bank {
     console.dir(command);
     execute(command);
   }
+
   select({ account, operation }) {
     const query = new AccountQuery(account, operation);
     this.queries.push(query);
