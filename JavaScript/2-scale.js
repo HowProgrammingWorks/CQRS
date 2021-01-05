@@ -34,11 +34,11 @@ class BankAccount {
 BankAccount.collection = new Map();
 
 const operations = {
-  Withdraw: command => {
+  Withdraw: (command) => {
     const account = BankAccount.find(command.account);
     account.balance -= command.amount;
   },
-  Income: command => {
+  Income: (command) => {
     const account = BankAccount.find(command.account);
     account.balance += command.amount;
   },
@@ -66,7 +66,7 @@ class BankRead {
   constructor() {
     this.commands = [];
     this.queries = [];
-    eventBus.on('command', command => {
+    eventBus.on('command', (command) => {
       this.commands.push(command);
     });
   }
