@@ -17,6 +17,8 @@ class AccountQuery {
 }
 
 class BankAccount {
+  static collection = new Map();
+
   constructor(name) {
     this.name = name;
     this.balance = 0;
@@ -27,8 +29,6 @@ class BankAccount {
     return BankAccount.collection.get(name);
   }
 }
-
-BankAccount.collection = new Map();
 
 const operations = {
   Withdraw: (command) => {
