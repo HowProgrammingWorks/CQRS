@@ -20,6 +20,8 @@ class AccountQuery {
 }
 
 class BankAccount {
+  static collection = new Map();
+
   constructor(name) {
     this.name = name;
     this.balance = 0;
@@ -31,14 +33,12 @@ class BankAccount {
   }
 }
 
-BankAccount.collection = new Map();
-
-const operations = {
-  Withdraw: (command) => {
+const OPERATIONS = {
+  withdraw: (command) => {
     const account = BankAccount.find(command.account);
     account.balance -= command.amount;
   },
-  Income: (command) => {
+  income: (command) => {
     const account = BankAccount.find(command.account);
     account.balance += command.amount;
   },
@@ -49,12 +49,11 @@ class BankWrite {
     this.commands = [];
   }
 
-  operation(account, amount) {
-    const operation = amount < 0 ? 'Withdraw' : 'Income';
-    const execute = operations[operation];
-    const command = new AccountCommand(
-      account.name, operation, Math.abs(amount)
-    );
+  operation(account, value) {
+    const operation = value < 0 ? 'withdraw' : 'income';
+    const execute = OPERATIONS[operation];
+    const amount = Math.abs(value);
+    const command = new AccountCommand(account.name, operation, amount);
     this.commands.push(command);
     eventBus.emit('command', command);
     console.dir(command);
@@ -106,11 +105,13 @@ console.table([account1, account2]);
 const res1 = readApi1.select({ account: 'Marcus Aurelius' });
 console.table(res1);
 
-const res2 = readApi2
-  .select({ account: 'Antoninus Pius', operation: 'Income' });
+const res2 = readApi2.select({
+  account: 'Antoninus Pius',
+  operation: 'income',
+});
 console.table(res2);
 
-const res3 = readApi3.select({ operation: 'Withdraw' });
+const res3 = readApi3.select({ operation: 'withdraw' });
 console.table(res3);
 
 console.table(readApi3.queries);

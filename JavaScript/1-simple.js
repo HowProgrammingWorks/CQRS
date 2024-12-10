@@ -17,6 +17,8 @@ class AccountQuery {
 }
 
 class BankAccount {
+  static collection = new Map();
+
   constructor(name) {
     this.name = name;
     this.balance = 0;
@@ -28,14 +30,12 @@ class BankAccount {
   }
 }
 
-BankAccount.collection = new Map();
-
-const operations = {
-  Withdraw: (command) => {
+const OPERATIONS = {
+  withdraw: (command) => {
     const account = BankAccount.find(command.account);
     account.balance -= command.amount;
   },
-  Income: (command) => {
+  income: (command) => {
     const account = BankAccount.find(command.account);
     account.balance += command.amount;
   },
@@ -47,12 +47,11 @@ class Bank {
     this.queries = [];
   }
 
-  operation(account, amount) {
-    const operation = amount < 0 ? 'Withdraw' : 'Income';
-    const execute = operations[operation];
-    const command = new AccountCommand(
-      account.name, operation, Math.abs(amount)
-    );
+  operation(account, value) {
+    const operation = value < 0 ? 'withdraw' : 'income';
+    const execute = OPERATIONS[operation];
+    const amount = Math.abs(value);
+    const command = new AccountCommand(account.name, operation, amount);
     this.commands.push(command);
     console.dir(command);
     execute(command);
@@ -89,10 +88,10 @@ console.table([account1, account2]);
 const res1 = bank.select({ account: 'Marcus Aurelius' });
 console.table(res1);
 
-const res2 = bank.select({ account: 'Antoninus Pius', operation: 'Income' });
+const res2 = bank.select({ account: 'Antoninus Pius', operation: 'income' });
 console.table(res2);
 
-const res3 = bank.select({ operation: 'Withdraw' });
+const res3 = bank.select({ operation: 'withdraw' });
 console.table(res3);
 
 console.log('Query logs:');
